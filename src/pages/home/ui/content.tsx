@@ -14,8 +14,8 @@ const Home = async () => {
   });
   return (
     <>
+      <h1>Desserts</h1>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <h1>Desserts</h1>
         <Products />
       </HydrationBoundary>
     </>

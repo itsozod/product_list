@@ -1,13 +1,16 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./products.module.css";
 
 import { Product } from "@/src/entities/product/model/model";
 import { useGetProducts } from "../api/useGetProducts";
 import Image from "next/image";
+import { useAddProduct } from "../api/useAddProduct";
 
 const Products = () => {
+  const [name, setName] = useState("");
   const { data: products, error, isLoading } = useGetProducts();
+  const { mutateAsync } = useAddProduct();
   // parser for products
   const ProductsParser = useMemo(() => {
     return products?.success?.map((product: Product) => {
@@ -47,7 +50,29 @@ const Products = () => {
   }
   if (products?.success?.length === 0) return <div>No products!</div>;
 
-  return <div className={styles["products_container"]}>{ProductsParser}</div>;
+  return (
+    <>
+      <div className={styles["products_container"]}>{ProductsParser}</div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const obj = {
+            name: name,
+            title: name,
+            price: 10,
+          };
+          mutateAsync(obj);
+        }}
+      >
+        <input
+          placeholder="products name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <button type="submit">Add product</button>
+      </form>
+    </>
+  );
 };
 
 export default Products;
