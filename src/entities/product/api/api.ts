@@ -7,6 +7,6 @@ export const fetchProducts = async () => {
     const data = await response.json();
     return { success: data };
   } catch (error) {
-    return { error: error.message };
+    return { error: (error as Error).message };
   }
 };

@@ -4,7 +4,7 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import { fetchProducts } from "../../../entities/product/api/api";
-import Products from "@/src/entities/product/product";
+import Products from "@/src/entities/product/ui/product";
 
 const Home = async () => {
   const queryClient = new QueryClient();
@@ -15,6 +15,7 @@ const Home = async () => {
   return (
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
+        <h1>Desserts</h1>
         <Products />
       </HydrationBoundary>
     </>
