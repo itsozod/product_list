@@ -6,8 +6,11 @@ import { Product } from "@/src/entities/product/model/model";
 import { useGetProducts } from "../api/useGetProducts";
 import Image from "next/image";
 import { useAddProduct } from "../api/useAddProduct";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Products = () => {
+  const router = useRouter();
   const [name, setName] = useState("");
   const { data: products, error, isLoading } = useGetProducts();
   const { mutateAsync } = useAddProduct();
@@ -71,6 +74,13 @@ const Products = () => {
         />
         <button type="submit">Add product</button>
       </form>
+      <button
+        onClick={() => {
+          router.push("/cart");
+        }}
+      >
+        Cart
+      </button>
     </>
   );
 };
