@@ -6,14 +6,14 @@ import { Product } from "@/src/entities/product/model/model";
 import { useGetProducts } from "../api/useGetProducts";
 import Image from "next/image";
 import { useAddProduct } from "../api/useAddProduct";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Products = () => {
-  const router = useRouter();
-  const [name, setName] = useState("");
   const { data: products, error, isLoading } = useGetProducts();
+  const queryClient = useQueryClient();
+  const [name, setName] = useState("");
   const { mutateAsync } = useAddProduct();
+
   // parser for products
   const ProductsParser = useMemo(() => {
     return products?.success?.map((product: Product) => {
@@ -57,14 +57,14 @@ const Products = () => {
     <>
       <div className={styles["products_container"]}>{ProductsParser}</div>
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
           const obj = {
             name: name,
             title: name,
             price: 10,
           };
-          mutateAsync(obj);
+          await mutateAsync(obj);
         }}
       >
         <input
@@ -74,13 +74,6 @@ const Products = () => {
         />
         <button type="submit">Add product</button>
       </form>
-      <button
-        onClick={() => {
-          router.push("/cart");
-        }}
-      >
-        Cart
-      </button>
     </>
   );
 };

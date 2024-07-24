@@ -1,3 +1,4 @@
+"use client";
 import {
   InvalidateQueryFilters,
   useMutation,
@@ -10,7 +11,7 @@ export const useAddProduct = () => {
   return useMutation({
     mutationFn: addProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries(["products"] as InvalidateQueryFilters);
+      queryClient.invalidateQueries(["products"] as InvalidateQueryFilters);  
     },
   });
 };
