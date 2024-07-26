@@ -11,8 +11,8 @@ const Home = async () => {
   await queryClient.prefetchQuery({
     queryKey: ["products"],
     queryFn: fetchProducts,
-    staleTime: 6 * 1000,
   });
+
   return (
     <>
       <h1>Desserts</h1>

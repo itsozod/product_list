@@ -5,6 +5,7 @@ const AddPage = () => {
   return (
     <>
       <CardWithForm />
+      <Form />
     </>
   );
 };

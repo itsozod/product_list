@@ -1,9 +1,5 @@
 "use client";
-import {
-  InvalidateQueryFilters,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addProduct } from "./api";
 
 export const useAddProduct = () => {
@@ -11,7 +7,9 @@ export const useAddProduct = () => {
   return useMutation({
     mutationFn: addProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries(["products"] as InvalidateQueryFilters);  
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      // queryClient.resetQueries({ queryKey: ["products"] });
+      // queryClient.removeQueries({ queryKey: ["products"] });
     },
   });
 };

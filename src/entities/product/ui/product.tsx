@@ -1,18 +1,48 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./products.module.css";
 
 import { Product } from "@/src/entities/product/model/model";
 import { useGetProducts } from "../api/useGetProducts";
 import Image from "next/image";
 import { useAddProduct } from "../api/useAddProduct";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchProducts } from "../api/api";
+import { useRouter } from "next/navigation";
 
 const Products = () => {
-  const { data: products, error, isLoading } = useGetProducts();
+  // const { data: products, error, isLoading, refetch } = useGetProducts();
   const queryClient = useQueryClient();
+  const {
+    data: products,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+  });
+
   const [name, setName] = useState("");
-  const { mutateAsync } = useAddProduct();
+  const { mutate } = useAddProduct();
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      sessionStorage.setItem("hasRefetched", "false");
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    const hasRefetched = sessionStorage.getItem("hasRefetched");
+
+    if (!hasRefetched || hasRefetched === "false") {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      sessionStorage.setItem("hasRefetched", "true");
+    }
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [queryClient]);
 
   // parser for products
   const ProductsParser = useMemo(() => {
@@ -43,7 +73,7 @@ const Products = () => {
         </>
       );
     });
-  }, [products?.success]);
+  }, [products]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error?.message}</div>;
@@ -57,14 +87,14 @@ const Products = () => {
     <>
       <div className={styles["products_container"]}>{ProductsParser}</div>
       <form
-        onSubmit={async (e) => {
+        onSubmit={(e) => {
           e.preventDefault();
           const obj = {
             name: name,
             title: name,
             price: 10,
           };
-          await mutateAsync(obj);
+          mutate(obj);
         }}
       >
         <input
