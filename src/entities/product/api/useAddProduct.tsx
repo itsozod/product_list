@@ -8,8 +8,6 @@ export const useAddProduct = () => {
     mutationFn: addProduct,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
-      // queryClient.resetQueries({ queryKey: ["products"] });
-      // queryClient.removeQueries({ queryKey: ["products"] });
     },
   });
 };
