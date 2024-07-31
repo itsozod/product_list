@@ -3,8 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "./api";
 
 export const useGetProducts = () => {
-  return useQuery({
-    queryFn: fetchProducts,
+  const {
+    data: products,
+    error,
+    isLoading,
+  } = useQuery({
     queryKey: ["products"],
+    queryFn: fetchProducts,
+    placeholderData: (data) => data?.success,
+    staleTime: Infinity,
   });
+  return { products, error, isLoading };
 };

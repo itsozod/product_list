@@ -1,16 +1,16 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./products.module.css";
 
 import { Product } from "@/src/entities/product/model/model";
 import { useGetProducts } from "../api/useGetProducts";
 import Image from "next/image";
 import { useAddProduct } from "../api/useAddProduct";
-const Products = () => {
-  const { data: products, error, isLoading } = useGetProducts();
 
+const Products = () => {
   const [name, setName] = useState("");
   const { mutateAsync } = useAddProduct();
+  const { products, error, isLoading } = useGetProducts();
 
   // parser for products
   const ProductsParser = useMemo(() => {
