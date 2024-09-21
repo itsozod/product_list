@@ -11,8 +11,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
           queries: {
             refetchOnWindowFocus: false,
             refetchOnReconnect: false,
-            // retry: 1, // Retry failed requests once\
-            // refetchOnMount: "always",
           },
         },
       })

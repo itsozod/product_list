@@ -11,7 +11,6 @@ export const useGetProducts = () => {
     queryKey: ["products"],
     queryFn: fetchProducts,
     placeholderData: (data) => data?.success,
-    staleTime: Infinity,
   });
   return { products, error, isLoading };
 };

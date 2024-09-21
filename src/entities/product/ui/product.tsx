@@ -1,15 +1,12 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import styles from "./products.module.css";
 
 import { Product } from "@/src/entities/product/model/model";
 import { useGetProducts } from "../api/useGetProducts";
 import Image from "next/image";
-import { useAddProduct } from "../api/useAddProduct";
 
 const Products = () => {
-  const [name, setName] = useState("");
-  const { mutateAsync } = useAddProduct();
   const { products, error, isLoading } = useGetProducts();
 
   // parser for products
@@ -33,9 +30,21 @@ const Products = () => {
               />
             </div>
             <div className={styles["product_info"]}>
-              <p style={{ margin: 0, color: "grey" }}>{product?.name}</p>
-              <p style={{ margin: 0, fontWeight: "bold" }}>{product?.title}</p>
-              <div style={{ color: "brown" }}>${product?.price}</div>
+              <p
+                className="m-0 text-gray-50"
+                style={{ margin: 0, color: "grey" }}
+              >
+                {product?.name}
+              </p>
+              <p
+                className="m-0 font-bold"
+                style={{ margin: 0, fontWeight: "bold" }}
+              >
+                {product?.title}
+              </p>
+              <div className="text-amber-600 font-semibold">
+                ${product?.price}
+              </div>
             </div>
           </div>
         </>
@@ -54,24 +63,6 @@ const Products = () => {
   return (
     <>
       <div className={styles["products_container"]}>{ProductsParser}</div>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const obj = {
-            name: name,
-            title: name,
-            price: 10,
-          };
-          await mutateAsync(obj);
-        }}
-      >
-        <input
-          placeholder="products name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <button type="submit">Add product</button>
-      </form>
     </>
   );
 };
