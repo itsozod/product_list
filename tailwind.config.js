@@ -1,3 +1,5 @@
+const { plugin } = require("postcss");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -15,7 +17,11 @@ module.exports = {
         "2xl": "1400px",
       },
     },
-    extend: {},
+    extend: {
+      colors: {
+        customRed: "hsl(14, 86%, 42%)",
+      },
+    },
   },
   plugins: [],
 };

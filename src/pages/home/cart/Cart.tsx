@@ -4,7 +4,7 @@ import React from "react";
 
 const Cart = () => {
   return (
-    <Card className="w-[350px]">
+    <Card className="w-full max-w[350px] border-none bg-white">
       <CardHeader>
         <CardTitle className="text-amber-800">Your cart (0)</CardTitle>
       </CardHeader>
@@ -16,10 +16,6 @@ const Cart = () => {
           </div>
         </div>
       </CardContent>
-      {/* <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Deploy</Button>
-      </CardFooter> */}
     </Card>
   );
 };
