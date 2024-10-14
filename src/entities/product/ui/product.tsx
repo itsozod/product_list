@@ -32,23 +32,12 @@ const Products = () => {
     [addToCart, cart, setCart]
   );
 
-  console.log("ids", selectedIds);
-
   // parser for products
   const ProductsParser = useMemo(() => {
     return products?.success?.map((product: Product) => {
       return (
         <>
-          <div
-            key={product?.id}
-            className="flex flex-col gap-6 relative" // Add relative here for parent positioning
-            onClick={() => {
-              handleAddCart(product);
-              setSelectedIds((prev) => {
-                return new Set(prev.add(product?.id));
-              });
-            }}
-          >
+          <div key={product?.id} className="flex flex-col gap-6 relative">
             <div
               className="rounded-[14px]"
               style={{
@@ -77,7 +66,15 @@ const Products = () => {
             </div>
 
             <div className="flex justify-center items-center absolute inset-0 top-[35%]">
-              <Button className="flex gap-2 bg-white text-black border-[1px] border-[hsl(14,86%,42%)] rounded-[50px] hover:text-white">
+              <Button
+                onClick={() => {
+                  handleAddCart(product);
+                  setSelectedIds((prev) => {
+                    return new Set(prev.add(product?.id));
+                  });
+                }}
+                className="flex gap-2 bg-white text-black border-[1px] border-[hsl(14,86%,42%)] rounded-[50px] hover:text-white"
+              >
                 <AddToCart />
                 Add to cart
               </Button>
@@ -86,7 +83,7 @@ const Products = () => {
         </>
       );
     });
-  }, [products, handleAddCart]);
+  }, [products, handleAddCart, selectedIds]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error?.message}</div>;
