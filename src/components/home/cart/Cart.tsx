@@ -2,12 +2,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyCard } from "@/src/shared/assets/icons/emptyCard";
 import React, { useMemo } from "react";
-import { useCartStore } from "./store/cart.store";
+import { useCartStore } from "../../../shared/store/cart.store";
 import { RemoveItem } from "@/src/shared/assets/icons/removeItem";
 import { Button } from "@/components/ui/button";
+import { useProductStore } from "@/src/shared/store/product.store";
 
 const Cart = () => {
   const { cart, deleteFromCart } = useCartStore();
+  const { deleteSelectedQuantities, deleteSelectedIds } = useProductStore();
   const cartItems = useMemo(
     () => cart?.reduce((acc, item) => acc + item?.quantity, 0),
     [cart]
@@ -28,7 +30,11 @@ const Cart = () => {
               style={{
                 border: "1px solid hsl(14, 25%, 72%)",
               }}
-              onClick={() => deleteFromCart(item)}
+              onClick={() => {
+                deleteFromCart(item);
+                deleteSelectedQuantities(item.id);
+                deleteSelectedIds(item.id);
+              }}
               className="flex justify-center items-center bg-[#fff] hover:bg-[#fff] rounded-[50%]  w-[20px] h-[20px] p-1 "
             >
               <RemoveItem />
@@ -38,6 +44,7 @@ const Cart = () => {
         </div>
       );
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart, deleteFromCart]);
 
   return (

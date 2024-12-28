@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export type CartItem = {
-  id: number;
+  id: string;
   name: string;
   img: string;
   title: string;

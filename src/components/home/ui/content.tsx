@@ -11,7 +11,7 @@ const Home = async () => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ["products"],
-    queryFn: fetchProducts,
+    queryFn: async () => fetchProducts(),
   });
 
   return (
@@ -32,5 +32,5 @@ const Home = async () => {
     </>
   );
 };
-
+export const dynamic = "force-dynamic";
 export default Home;

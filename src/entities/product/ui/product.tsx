@@ -1,17 +1,22 @@
 "use client";
 import React, { useCallback, useMemo, useState } from "react";
-
-import { Product } from "@/src/entities/product/model/model";
+import { Product, SelectedQuantity } from "@/src/entities/product/model/model";
 import { useGetProducts } from "../api/useGetProducts";
 import Image from "next/image";
-import { useCartStore } from "@/src/pages/home/cart/store/cart.store";
+import { useCartStore } from "@/src/shared/store/cart.store";
 import { Button } from "@/components/ui/button";
 import { AddToCart } from "@/src/shared/assets/icons/addToCart";
+import { useProductStore } from "@/src/shared/store/product.store";
 
 const Products = () => {
-  const { products, error, isLoading } = useGetProducts();
-  const [selectedIds, setSelectedIds] = useState(new Set());
+  const { products, isLoading } = useGetProducts();
   const { cart, addToCart, setCart } = useCartStore();
+  const {
+    selectedQuantities,
+    selectedIds,
+    handleSelectedQuantities,
+    handleSelectedIds,
+  } = useProductStore();
 
   const handleAddCart = useCallback(
     (product: Product) => {
@@ -34,7 +39,7 @@ const Products = () => {
 
   // parser for products
   const ProductsParser = useMemo(() => {
-    return products?.success?.map((product: Product) => {
+    return products?.map((product: Product) => {
       return (
         <>
           <div key={product?.id} className="flex flex-col gap-6 relative">
@@ -49,7 +54,7 @@ const Products = () => {
               <Image
                 src={product?.img}
                 alt={product?.name}
-                className="w-[100%] h-[220px] rounded-[12px] object-cover"
+                className="w-[100%] h-[220px] rounded-[12px] object-fill"
                 width={250}
                 height={220}
                 loading="lazy"
@@ -66,32 +71,39 @@ const Products = () => {
             </div>
 
             <div className="flex justify-center items-center absolute inset-0 top-[35%]">
-              <Button
-                onClick={() => {
-                  handleAddCart(product);
-                  setSelectedIds((prev) => {
-                    return new Set(prev.add(product?.id));
-                  });
-                }}
-                className="flex gap-2 bg-white text-black border-[1px] border-[hsl(14,86%,42%)] rounded-[50px] hover:text-white"
-              >
-                <AddToCart />
-                Add to cart
-              </Button>
+              {selectedQuantities[product?.id] ? (
+                <Button
+                  onClick={() => {
+                    handleSelectedQuantities(product?.id);
+                    handleAddCart(product);
+                  }}
+                >
+                  Quantity: {selectedQuantities[product?.id]}
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    handleAddCart(product);
+                    handleSelectedIds(product.id);
+                    handleSelectedQuantities(product?.id);
+                  }}
+                  className="flex gap-2 bg-white text-black border-[1px] border-[hsl(14,86%,42%)] rounded-[50px] hover:text-white"
+                >
+                  <AddToCart />
+                  Add to cart
+                </Button>
+              )}
             </div>
           </div>
         </>
       );
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, handleAddCart, selectedIds]);
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>{error?.message}</div>;
 
-  if (products?.error) {
-    return <div>Error: {products.error}</div>;
-  }
-  if (products?.success?.length === 0) return <div>No products!</div>;
+  if (products?.length === 0) return <div>No products!</div>;
 
   return (
     <>
