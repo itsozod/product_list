@@ -6,6 +6,7 @@ interface ProductItem {
   selectedQuantities: SelectedQuantity;
   handleSelectedIds: (id: string) => void;
   handleSelectedQuantities: (id: string) => void;
+  handleDecSelectedQuantities: (id: string) => void;
   deleteSelectedIds: (id: string) => void;
   deleteSelectedQuantities: (id: string) => void;
 }
@@ -34,6 +35,18 @@ export const useProductStore = create<ProductItem>()((set) => ({
       } else {
         state.selectedQuantities[id] = 1;
       }
+      return { selectedQuantities: state.selectedQuantities };
+    });
+  },
+  handleDecSelectedQuantities: (id) => {
+    set((state) => {
+      if (state.selectedQuantities[id] - 1 === 0) {
+        state.deleteSelectedQuantities(id);
+        state.deleteSelectedIds(id);
+      } else {
+        state.selectedQuantities[id] = state.selectedQuantities[id] - 1;
+      }
+
       return { selectedQuantities: state.selectedQuantities };
     });
   },

@@ -31,7 +31,7 @@ const Cart = () => {
                 border: "1px solid hsl(14, 25%, 72%)",
               }}
               onClick={() => {
-                deleteFromCart(item);
+                deleteFromCart(item.id);
                 deleteSelectedQuantities(item.id);
                 deleteSelectedIds(item.id);
               }}

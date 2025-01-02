@@ -1,12 +1,14 @@
 "use client";
-import React, { useCallback, useMemo, useState } from "react";
-import { Product, SelectedQuantity } from "@/src/entities/product/model/model";
+import React, { useCallback, useMemo } from "react";
+import { Product } from "@/src/entities/product/model/model";
 import { useGetProducts } from "../api/useGetProducts";
 import Image from "next/image";
 import { useCartStore } from "@/src/shared/store/cart.store";
 import { Button } from "@/components/ui/button";
 import { AddToCart } from "@/src/shared/assets/icons/addToCart";
 import { useProductStore } from "@/src/shared/store/product.store";
+import { DecrementQuantity } from "@/src/shared/assets/icons/decrementQuantity";
+import { IncrementQuantity } from "@/src/shared/assets/icons/incrementQuantity";
 
 const Products = () => {
   const { products, isLoading } = useGetProducts();
@@ -15,7 +17,9 @@ const Products = () => {
     selectedQuantities,
     selectedIds,
     handleSelectedQuantities,
+    handleDecSelectedQuantities,
     handleSelectedIds,
+    deleteSelectedIds,
   } = useProductStore();
 
   const handleAddCart = useCallback(
@@ -35,6 +39,20 @@ const Products = () => {
       }
     },
     [addToCart, cart, setCart]
+  );
+
+  const handleDecreaseCartQuantity = useCallback(
+    (id: string) => {
+      const decrease = cart?.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+      );
+      const filterZeroQuantity = decrease?.filter(
+        (item) => item.quantity !== 0
+      );
+      setCart(filterZeroQuantity);
+    },
+
+    [cart, setCart]
   );
 
   // parser for products
@@ -72,14 +90,31 @@ const Products = () => {
 
             <div className="flex justify-center items-center absolute inset-0 top-[35%]">
               {selectedQuantities[product?.id] ? (
-                <Button
-                  onClick={() => {
-                    handleSelectedQuantities(product?.id);
-                    handleAddCart(product);
-                  }}
-                >
-                  Quantity: {selectedQuantities[product?.id]}
-                </Button>
+                <div className="bg-[hsl(14,86%,42%)] rounded-[50px]">
+                  <div className="flex items-center gap-6">
+                    <Button
+                      size={"icon"}
+                      className="bg-transparent hover:bg-transparent"
+                      onClick={() => {
+                        handleDecreaseCartQuantity(product.id);
+                        handleDecSelectedQuantities(product.id);
+                      }}
+                    >
+                      <DecrementQuantity />
+                    </Button>
+                    {selectedQuantities[product?.id]}
+                    <Button
+                      className="bg-transparent hover:bg-transparent"
+                      size={"icon"}
+                      onClick={() => {
+                        handleSelectedQuantities(product?.id);
+                        handleAddCart(product);
+                      }}
+                    >
+                      <IncrementQuantity />
+                    </Button>
+                  </div>
+                </div>
               ) : (
                 <Button
                   onClick={() => {
@@ -98,8 +133,16 @@ const Products = () => {
         </>
       );
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products, handleAddCart, selectedIds]);
+  }, [
+    products,
+    handleAddCart,
+    selectedIds,
+    selectedQuantities,
+    handleDecSelectedQuantities,
+    handleDecreaseCartQuantity,
+    handleSelectedIds,
+    handleSelectedQuantities,
+  ]);
 
   if (isLoading) return <div>Loading...</div>;
 
