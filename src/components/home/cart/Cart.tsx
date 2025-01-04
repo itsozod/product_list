@@ -14,9 +14,13 @@ const Cart = () => {
     () => cart?.reduce((acc, item) => acc + item?.quantity, 0),
     [cart]
   );
+  const total = useMemo(
+    () => cart?.reduce((acc, item) => acc + item.quantity * item.price, 0),
+    [cart]
+  );
 
   const CartParser = useMemo(() => {
-    return cart?.map((item, index, cart) => {
+    return cart?.map((item) => {
       return (
         <div className="flex flex-col gap-3" key={item?.id}>
           <div className="font-bold mt-4">{item?.name}</div>
@@ -40,7 +44,7 @@ const Cart = () => {
               <RemoveItem />
             </Button>
           </div>
-          {cart?.length - 1 !== index && <hr />}
+          <hr />
         </div>
       );
     });
@@ -48,7 +52,7 @@ const Cart = () => {
   }, [cart, deleteFromCart]);
 
   return (
-    <Card className="w-[350px] border-none bg-white">
+    <Card className="w-[350px] h-full border-none bg-white">
       <CardHeader>
         <CardTitle className="text-amber-800">
           Your cart ({cartItems})
@@ -63,7 +67,18 @@ const Cart = () => {
             </div>
           </div>
         ) : (
-          CartParser
+          <div className="scrollbar-none max-h-[300px] overflow-auto">{CartParser}</div>
+        )}
+        {cart?.length !== 0 && (
+          <>
+            <div className="flex justify-between mt-3 mb-4">
+              <p>Order total</p>
+              <h1 className="font-bold text-lg">${total}</h1>
+            </div>
+            <Button className="w-full rounded-full bg-[hsl(14,86%,42%)] hover:bg-[hsl(14,86%,42%)]">
+              Confirm order
+            </Button>
+          </>
         )}
       </CardContent>
     </Card>

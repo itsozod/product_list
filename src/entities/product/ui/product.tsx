@@ -19,7 +19,6 @@ const Products = () => {
     handleSelectedQuantities,
     handleDecSelectedQuantities,
     handleSelectedIds,
-    deleteSelectedIds,
   } = useProductStore();
 
   const handleAddCart = useCallback(
@@ -57,7 +56,7 @@ const Products = () => {
 
   // parser for products
   const ProductsParser = useMemo(() => {
-    return products?.map((product: Product) => {
+    return products?.map((product) => {
       return (
         <>
           <div key={product?.id} className="flex flex-col gap-6 relative">
