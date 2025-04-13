@@ -61,12 +61,8 @@ const Products = () => {
         <>
           <div key={product?.id} className="flex flex-col gap-6 relative">
             <div
-              className="rounded-[14px]"
-              style={{
-                border: selectedIds?.has(product?.id)
-                  ? "2px solid hsl(14, 86%, 42%)"
-                  : "none",
-              }}
+              className="rounded-[14px] `border-2 ${
+  selectedIds?.has(product?.id) ? 'border-[hsl(14,86%,42%)]' : 'border-transparent'"
             >
               <Image
                 src={product?.img}
@@ -90,10 +86,10 @@ const Products = () => {
             <div className="flex justify-center items-center absolute inset-0 top-[35%]">
               {selectedQuantities[product?.id] ? (
                 <div className="bg-[hsl(14,86%,42%)] rounded-[50px]">
-                  <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-6 py-2 px-4">
                     <Button
                       size={"icon"}
-                      className="bg-transparent hover:bg-transparent"
+                      className="bg-transparent hover:bg-transparent border border-white rounded-[50px] w-[20px] h-[20px] "
                       onClick={() => {
                         handleDecreaseCartQuantity(product.id);
                         handleDecSelectedQuantities(product.id);
@@ -101,9 +97,11 @@ const Products = () => {
                     >
                       <DecrementQuantity />
                     </Button>
-                    {selectedQuantities[product?.id]}
+                    <p className="text-white">
+                      {selectedQuantities[product?.id]}
+                    </p>
                     <Button
-                      className="bg-transparent hover:bg-transparent"
+                      className="bg-transparent hover:bg-transparent border border-white rounded-[50px] w-[20px] h-[20px]"
                       size={"icon"}
                       onClick={() => {
                         handleSelectedQuantities(product?.id);
@@ -135,7 +133,6 @@ const Products = () => {
   }, [
     products,
     handleAddCart,
-    selectedIds,
     selectedQuantities,
     handleDecSelectedQuantities,
     handleDecreaseCartQuantity,
@@ -149,7 +146,7 @@ const Products = () => {
 
   return (
     <>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-7">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-10">
         {ProductsParser}
       </div>
     </>
