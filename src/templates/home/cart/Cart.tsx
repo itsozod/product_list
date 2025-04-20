@@ -1,11 +1,17 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/src/shared/components/ui/card";
 import { EmptyCard } from "@/src/shared/assets/icons/emptyCard";
 import React, { useMemo } from "react";
-import { useCartStore } from "../../../shared/store/cart.store";
+import { useCartStore } from "../../../entities/cart/store/cart.store";
 import { RemoveItem } from "@/src/shared/assets/icons/removeItem";
-import { Button } from "@/components/ui/button";
-import { useProductStore } from "@/src/shared/store/product.store";
+import { Button } from "@/src/shared/components/ui/button";
+import { useProductStore } from "@/src/entities/product/store/product.store";
+import { CartDialog } from "@/src/features";
 
 const Cart = () => {
   const { cart, deleteFromCart } = useCartStore();
@@ -52,36 +58,38 @@ const Cart = () => {
   }, [cart, deleteFromCart]);
 
   return (
-    <Card className="w-[350px] h-full border-none bg-white">
-      <CardHeader>
-        <CardTitle className="text-amber-800">
-          Your cart ({cartItems})
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {cart?.length === 0 ? (
-          <div className="flex items-center justify-center flex-col">
-            <EmptyCard />
-            <div className="text-amber-800">
-              Your added items will appear here
+    <div>
+      <Card className="w-full sm:w-[350px] border-none bg-white">
+        <CardHeader>
+          <CardTitle className="text-amber-800">
+            Your cart ({cartItems})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {cart?.length === 0 ? (
+            <div className="flex items-center justify-center flex-col">
+              <EmptyCard />
+              <div className="text-amber-800">
+                Your added items will appear here
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="scrollbar-none max-h-[300px] overflow-auto">{CartParser}</div>
-        )}
-        {cart?.length !== 0 && (
-          <>
-            <div className="flex justify-between mt-3 mb-4">
-              <p>Order total</p>
-              <h1 className="font-bold text-lg">${total}</h1>
+          ) : (
+            <div className="scrollbar-none max-h-[300px] overflow-auto">
+              {CartParser}
             </div>
-            <Button className="w-full rounded-full bg-[hsl(14,86%,42%)] hover:bg-[hsl(14,86%,42%)]">
-              Confirm order
-            </Button>
-          </>
-        )}
-      </CardContent>
-    </Card>
+          )}
+          {cart?.length !== 0 && (
+            <>
+              <div className="flex justify-between mt-3 mb-4">
+                <p>Order total</p>
+                <h1 className="font-bold text-lg">${total}</h1>
+              </div>
+              <CartDialog />
+            </>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

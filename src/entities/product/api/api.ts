@@ -1,8 +1,9 @@
 export const fetchProducts = async () => {
-  const response = await fetch("http://localhost:5000/products");
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/products`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log((error as Error).message);
   }
-  const data = await response.json();
-  return data;
 };

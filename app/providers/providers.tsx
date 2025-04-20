@@ -14,7 +14,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
       new QueryClient({
         queryCache: new QueryCache({
           onError: (error) => {
-            console.log("err:", error);
             toast.error(`Error while fetching, ${error.message}`, {
               position: "top-right",
             });

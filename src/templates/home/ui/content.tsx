@@ -4,9 +4,9 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import { fetchProducts } from "../../../entities/product/api/api";
-import Products from "@/src/entities/product/ui/product";
-import Cart from "../cart/Cart";
 import AppContainer from "@/src/widgets/AppContainer";
+import Cart from "../cart/Cart";
+import { Products } from "@/src/features";
 
 const Home = async () => {
   const queryClient = new QueryClient();
@@ -19,11 +19,13 @@ const Home = async () => {
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <AppContainer>
-          <div className="w-full max-w-[700px] m-2">
-            <h1 className="text-2xl font-bold mb-7">Desserts</h1>
-            <Products />
+          <div className="w-full flex flex-col md:flex-row justify-between max-w-[1100px]">
+            <div className="w-full max-w-[700px] m-2">
+              <h1 className="text-2xl font-bold mb-7">Desserts</h1>
+              <Products />
+            </div>
+            <Cart />
           </div>
-          <Cart />
         </AppContainer>
       </HydrationBoundary>
     </>

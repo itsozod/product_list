@@ -1,17 +1,17 @@
 "use client";
 import React, { useCallback, useMemo } from "react";
 import { Product } from "@/src/entities/product/model/model";
-import { useGetProducts } from "../api/useGetProducts";
+import { useGetProducts } from "../../../entities/product/api/useGetProducts";
 import Image from "next/image";
-import { useCartStore } from "@/src/shared/store/cart.store";
-import { Button } from "@/components/ui/button";
+import { useCartStore } from "@/src/entities/cart/store/cart.store";
+import { Button } from "@/src/shared/components/ui/button";
 import { AddToCart } from "@/src/shared/assets/icons/addToCart";
-import { useProductStore } from "@/src/shared/store/product.store";
+import { useProductStore } from "@/src/entities/product/store/product.store";
 import { DecrementQuantity } from "@/src/shared/assets/icons/decrementQuantity";
 import { IncrementQuantity } from "@/src/shared/assets/icons/incrementQuantity";
 
 const Products = () => {
-  const { products, isLoading } = useGetProducts();
+  const { products, isLoading, isSuccess } = useGetProducts();
   const { cart, addToCart, setCart } = useCartStore();
   const {
     selectedQuantities,
@@ -61,8 +61,11 @@ const Products = () => {
         <>
           <div key={product?.id} className="flex flex-col gap-6 relative">
             <div
-              className="rounded-[14px] `border-2 ${
-  selectedIds?.has(product?.id) ? 'border-[hsl(14,86%,42%)]' : 'border-transparent'"
+              className={`rounded-[14px] border-2 ${
+                selectedIds.has(product.id)
+                  ? "border-[hsl(14,86%,42%)]"
+                  : "border-transparent"
+              }`}
             >
               <Image
                 src={product?.img}
@@ -132,6 +135,7 @@ const Products = () => {
     });
   }, [
     products,
+    selectedIds,
     handleAddCart,
     selectedQuantities,
     handleDecSelectedQuantities,
@@ -142,11 +146,11 @@ const Products = () => {
 
   if (isLoading) return <div>Loading...</div>;
 
-  if (products?.length === 0) return <div>No products!</div>;
+  if (isSuccess && products?.length === 0) return <div>No products!</div>;
 
   return (
     <>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-10">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-6">
         {ProductsParser}
       </div>
     </>
