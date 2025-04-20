@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&display=swap");
 *,
 *::before,
 *::after {
@@ -10,8 +11,14 @@
 }
 :root {
   --bg: hsl(13, 31%, 94%);
+  --bg-rose-100: hsl(13, 31%, 94%);
+  --bg-rose-400: hsl(7, 20%, 60%);
+  --bg-rose-500: hsl(12, 20%, 44%);
+  --bg-rose-900: hsl(14, 65%, 9%);
 }
 body {
+  font-family: "Red Hat Text", sans-serif;
+  font-size: 16px;
   background-color: var(--bg);
 }
 @layer utilities {

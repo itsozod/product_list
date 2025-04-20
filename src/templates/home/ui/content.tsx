@@ -19,8 +19,8 @@ const Home = async () => {
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <AppContainer>
-          <div className="w-full flex flex-col md:flex-row justify-between max-w-[1100px]">
-            <div className="w-full max-w-[700px] m-2">
+          <div className="w-full flex flex-col gap-8 md:flex-row justify-between max-w-[1070px]">
+            <div className="w-full max-w-[700px]">
               <h1 className="text-2xl font-bold mb-7">Desserts</h1>
               <Products />
             </div>

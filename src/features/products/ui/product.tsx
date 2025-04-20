@@ -77,15 +77,14 @@ const Products = () => {
               />
             </div>
             <div className="flex flex-col gap-1">
-              <p className="m-0 text-gray-500">{product?.name}</p>
-              <p className="m-0 font-bold text-ellipsis overflow-hidden whitespace-nowrap">
+              <p className="m-0 text-[--bg-rose-400]">{product?.name}</p>
+              <p className="m-0 font-bold text-ellipsis overflow-hidden whitespace-nowrap text-[--bg-rose-900]">
                 {product?.title}
               </p>
               <div className="text-amber-600 font-semibold">
                 ${product?.price}
               </div>
             </div>
-
             <div className="flex justify-center items-center absolute inset-0 top-[35%]">
               {selectedQuantities[product?.id] ? (
                 <div className="bg-[hsl(14,86%,42%)] rounded-[50px]">

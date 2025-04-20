@@ -5,6 +5,7 @@ export interface Product {
   title: string;
   price: number;
   quantity: number;
+  thumbnail_img: string;
 }
 export interface SelectedQuantity {
   [key: string]: number;

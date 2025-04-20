@@ -12,6 +12,7 @@ import { RemoveItem } from "@/src/shared/assets/icons/removeItem";
 import { Button } from "@/src/shared/components/ui/button";
 import { useProductStore } from "@/src/entities/product/store/product.store";
 import { CartDialog } from "@/src/features";
+import { CarbonNeutralIcon } from "@/src/shared/assets/icons/carbonNeutralIcon";
 
 const Cart = () => {
   const { cart, deleteFromCart } = useCartStore();
@@ -29,12 +30,16 @@ const Cart = () => {
     return cart?.map((item) => {
       return (
         <div className="flex flex-col gap-3" key={item?.id}>
-          <div className="font-bold mt-4">{item?.name}</div>
+          <div className="font-bold mt-4 text-[--bg-rose-900]">
+            {item?.name}
+          </div>
           <div className="flex justify-between">
             <div className="flex gap-2">
               <div className="text-customRed font-bold">{item?.quantity}x</div>
-              <div>@${item?.price}</div>
-              <div>${item?.quantity * item?.price}</div>
+              <div className="text-[--bg-rose-400]">@${item?.price}</div>
+              <div className="text-[--bg-rose-500]">
+                ${item?.quantity * item?.price}
+              </div>
             </div>
             <Button
               style={{
@@ -81,10 +86,24 @@ const Cart = () => {
           {cart?.length !== 0 && (
             <>
               <div className="flex justify-between mt-3 mb-4">
-                <p>Order total</p>
-                <h1 className="font-bold text-lg">${total}</h1>
+                <p className="font-light text-[--bg-rose-900]">Order total</p>
+                <p className="font-bold text-lg text-[--bg-rose-900]">
+                  ${total}
+                </p>
               </div>
-              <CartDialog />
+              <div className="bg-[--bg] p-3 flex items-center justify-center rounded-[8px] mb-4">
+                <div className="flex gap-2 items-center">
+                  <CarbonNeutralIcon />
+                  <div className="text-[12px]">
+                    This is a{" "}
+                    <span className="font-bold text-[--bg-rose-900]">
+                      carbon-neutral
+                    </span>{" "}
+                    delivery
+                  </div>
+                </div>
+              </div>
+              <CartDialog cart={cart} total={total} />
             </>
           )}
         </CardContent>
